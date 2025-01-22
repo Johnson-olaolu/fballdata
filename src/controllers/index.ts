@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { User } from "../models/User.model";
 
 class IndexController {
   public getName = (req: Request, res: Response) => {
