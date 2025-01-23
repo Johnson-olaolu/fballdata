@@ -1,33 +1,31 @@
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize";
-import database from "../config/database.config";
-import { Article } from "./Article.model";
+import { Article, ArticleTags } from "./Article.model";
+import { BelongsToMany, Column, CreatedAt, DataType, Default, DeletedAt, Index, Model, PrimaryKey, UpdatedAt } from "sequelize-typescript";
+import { v4 as uuidv4 } from "uuid";
 
-export class Tag extends Model<InferAttributes<Tag>, InferCreationAttributes<Tag>> {
-  // 'CreationOptional' is a special type that marks the field as optional
-  // when creating an instance of the model (such as using Model.create()).
-  declare id: CreationOptional<string>;
+export class Tag extends Model {
+  @PrimaryKey
+  @Default(uuidv4)
+  @Column({
+    type: DataType.UUID,
+    allowNull: false,
+  })
+  declare id: string;
+
+  @Column({
+    allowNull: false,
+  })
+  @Index
   declare name: string;
-  declare createdAt: CreationOptional<Date>;
-  declare updatedAt: CreationOptional<Date>;
+
+  @BelongsToMany(() => Article, () => ArticleTags)
+  declare articles: Article[];
+
+  @CreatedAt
+  declare creationAt: Date;
+
+  @UpdatedAt
+  declare updatedAt: Date;
+
+  @DeletedAt
+  declare deletionAt: Date;
 }
-
-Tag.init(
-  {
-    id: {
-      allowNull: false,
-      primaryKey: true,
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-    },
-    name: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-
-    createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE,
-  },
-  { sequelize: database }
-);
-
-Tag.belongsToMany(Article, { through: "ArticleTags" });

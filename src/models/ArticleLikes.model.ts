@@ -1,8 +1,9 @@
-import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, Model, PrimaryKey, UpdatedAt } from "sequelize-typescript";
+import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, HasMany, Model, PrimaryKey, UpdatedAt } from "sequelize-typescript";
 import { Article } from "./Article.model";
 import { v4 as uuidv4 } from "uuid";
+import { ArticleView } from "./ArticleViews.model";
 
-export class ArticleView extends Model {
+export class ArticleLikes extends Model {
   @PrimaryKey
   @Default(uuidv4)
   @Column({

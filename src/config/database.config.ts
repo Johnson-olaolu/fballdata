@@ -1,6 +1,6 @@
 // Import the Sequelize module from sequelize-typescript
 
-import { Sequelize } from "sequelize";
+import { Sequelize } from "sequelize-typescript";
 import { DB_NAME, DB_PASSWORD, DB_PORT, DB_USERNAME } from ".";
 import logger from "./wiston.config";
 
@@ -12,6 +12,7 @@ const database = new Sequelize(DB_NAME || "", DB_USERNAME || "", DB_PASSWORD || 
   dialect: "postgres",
   port: DB_PORT ? parseInt(DB_PORT) : 5432,
   logging: (msg) => logger.debug(msg),
+  models: [__dirname + "/**/*.model.ts"],
 });
 
 export const initDatabase = async () => {

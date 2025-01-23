@@ -1,93 +1,85 @@
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize";
+import { Column, CreatedAt, DataType, Default, DeletedAt, HasMany, Index, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
+import { v4 as uuidv4 } from "uuid";
 import { RoleEnum } from "../utils/constants";
-import database from "../config/database.config";
 import { Article } from "./Article.model";
 
-// order of InferAttributes & InferCreationAttributes is important.
-export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
-  // 'CreationOptional' is a special type that marks the field as optional
-  // when creating an instance of the model (such as using Model.create()).
-  declare id: CreationOptional<string>;
-  declare firstName: string;
-  declare lastName: string;
-  declare email: string;
+@Table
+export class User extends Model {
+  @PrimaryKey
+  @Default(uuidv4)
+  @Column({
+    type: DataType.UUID,
+    allowNull: false,
+  })
+  declare id: string;
+
+  @Column({
+    allowNull: false,
+  })
+  declare fullName: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+    unique: true,
+  })
+  @Index
   declare userName: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+    unique: true,
+  })
+  @Index
+  declare email: string;
+
+  @Column({
+    allowNull: false,
+  })
   declare password: string;
+
+  @Column({
+    type: DataType.ENUM(...Object.values(RoleEnum)),
+    allowNull: false,
+  })
+  @Default(RoleEnum.USER)
   declare role: RoleEnum;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: false,
+  })
+  @Default(false)
   declare isVerified: boolean;
-  declare profilePicture: string | null;
-  declare verifyEmailToken: string | null;
-  declare verifyEmailTokenTTL: Date | null;
-  declare changePasswordToken: string | null;
-  declare changePasswordTokenTTL: Date | null;
-  declare createdAt: CreationOptional<Date>;
-  declare updatedAt: CreationOptional<Date>;
+
+  @Column
+  declare profilePicture: string;
+
+  @Column
+  declare bannerPicture: string;
+
+  @Column
+  declare verifyEmailToken: string;
+
+  @Column
+  declare verifyEmailTokenTTL: string;
+
+  @Column
+  declare chnagePasswordToken: string;
+
+  @Column
+  declare chnagePasswordTokenTTL: string;
+
+  @HasMany(() => Article)
+  declare articles: Article[];
+
+  @CreatedAt
+  declare creationAt: Date;
+
+  @UpdatedAt
+  declare updatedAt: Date;
+
+  @DeletedAt
+  declare deletionAt: Date;
 }
-
-User.init(
-  {
-    id: {
-      allowNull: false,
-      primaryKey: true,
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-    },
-    firstName: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    lastName: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    email: {
-      allowNull: false,
-      type: DataTypes.STRING,
-      unique: true,
-    },
-    password: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    userName: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    role: {
-      allowNull: false,
-      type: DataTypes.ENUM,
-      defaultValue: RoleEnum.USER,
-    },
-    isVerified: {
-      allowNull: false,
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
-    profilePicture: {
-      type: DataTypes.STRING,
-    },
-    verifyEmailToken: {
-      type: DataTypes.STRING,
-    },
-    verifyEmailTokenTTL: {
-      type: DataTypes.DATE,
-    },
-    changePasswordToken: {
-      type: DataTypes.STRING,
-    },
-    changePasswordTokenTTL: {
-      type: DataTypes.DATE,
-    },
-    createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE,
-  },
-  {
-    indexes: [
-      { unique: true, fields: ["email"] },
-      { unique: true, fields: ["userName"] },
-    ],
-    sequelize: database,
-  }
-);
-
-User.hasMany(Article);
