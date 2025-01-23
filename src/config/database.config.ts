@@ -13,17 +13,8 @@ const database = new Sequelize(DB_NAME || "", DB_USERNAME || "", DB_PASSWORD || 
   dialect: "postgres",
   port: DB_PORT ? parseInt(DB_PORT) : 5432,
   logging: (msg) => logger.debug(msg),
-  // models: [__dirname + "/**/*.model.ts"],
   models: [path.resolve(__dirname, "../**/*.model.ts")],
 });
-
-// console.log();
-
-export const initDatabase = async () => {
-  console.log(database.models);
-  await database.sync({ force: true, alter: true });
-  console.log("Database Connected");
-};
 
 // Export the connection object as the default module
 export default database;
