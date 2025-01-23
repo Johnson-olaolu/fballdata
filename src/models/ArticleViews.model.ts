@@ -1,8 +1,9 @@
-import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, Model, PrimaryKey, UpdatedAt } from "sequelize-typescript";
-import { Article } from "./Article.model";
+import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
 import { v4 as uuidv4 } from "uuid";
+import Article from "./Article.model";
 
-export class ArticleView extends Model {
+@Table
+export default class ArticleView extends Model {
   @PrimaryKey
   @Default(uuidv4)
   @Column({
@@ -12,7 +13,7 @@ export class ArticleView extends Model {
   declare id: string;
 
   @ForeignKey(() => Article)
-  @Column
+  @Column(DataType.UUID)
   declare articleId: string;
 
   @BelongsTo(() => Article)

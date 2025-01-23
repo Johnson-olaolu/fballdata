@@ -1,10 +1,10 @@
 import { Column, CreatedAt, DataType, Default, DeletedAt, HasMany, Index, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
 import { v4 as uuidv4 } from "uuid";
 import { RoleEnum } from "../utils/constants";
-import { Article } from "./Article.model";
+import Article from "./Article.model";
 
 @Table
-export class User extends Model {
+export default class User extends Model {
   @PrimaryKey
   @Default(uuidv4)
   @Column({
@@ -39,18 +39,18 @@ export class User extends Model {
   })
   declare password: string;
 
+  @Default(RoleEnum.USER)
   @Column({
     type: DataType.ENUM(...Object.values(RoleEnum)),
     allowNull: false,
   })
-  @Default(RoleEnum.USER)
   declare role: RoleEnum;
 
+  @Default(false)
   @Column({
     type: DataType.BOOLEAN,
     allowNull: false,
   })
-  @Default(false)
   declare isVerified: boolean;
 
   @Column

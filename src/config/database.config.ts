@@ -3,6 +3,7 @@
 import { Sequelize } from "sequelize-typescript";
 import { DB_NAME, DB_PASSWORD, DB_PORT, DB_USERNAME } from ".";
 import logger from "./wiston.config";
+import path from "path";
 
 // Import the Customer model from the ./models module
 
@@ -12,10 +13,14 @@ const database = new Sequelize(DB_NAME || "", DB_USERNAME || "", DB_PASSWORD || 
   dialect: "postgres",
   port: DB_PORT ? parseInt(DB_PORT) : 5432,
   logging: (msg) => logger.debug(msg),
-  models: [__dirname + "/**/*.model.ts"],
+  // models: [__dirname + "/**/*.model.ts"],
+  models: [path.resolve(__dirname, "../**/*.model.ts")],
 });
 
+// console.log();
+
 export const initDatabase = async () => {
+  console.log(database.models);
   await database.sync({ force: true, alter: true });
   console.log("Database Connected");
 };

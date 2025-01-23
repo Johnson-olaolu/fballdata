@@ -1,8 +1,10 @@
-import { Article, ArticleTags } from "./Article.model";
-import { BelongsToMany, Column, CreatedAt, DataType, Default, DeletedAt, Index, Model, PrimaryKey, UpdatedAt } from "sequelize-typescript";
+import { BelongsToMany, Column, CreatedAt, DataType, Default, DeletedAt, Index, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
 import { v4 as uuidv4 } from "uuid";
+import Article from "./Article.model";
+import ArticleTags from "./ArticleTags.model";
 
-export class Tag extends Model {
+@Table
+export default class Tag extends Model {
   @PrimaryKey
   @Default(uuidv4)
   @Column({

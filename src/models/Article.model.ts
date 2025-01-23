@@ -15,13 +15,14 @@ import {
   UpdatedAt,
 } from "sequelize-typescript";
 import { v4 as uuidv4 } from "uuid";
-import { User } from "./User.model";
-import { Tag } from "./Tag.model";
-import { ArticleLikes } from "./ArticleLikes.model";
-import { ArticleView } from "./ArticleViews.model";
+import User from "./User.model";
+import ArticleTags from "./ArticleTags.model";
+import Tag from "./Tag.model";
+import ArticleLike from "./ArticleLike.model";
+import ArticleView from "./ArticleViews.model";
 
 @Table
-export class Article extends Model {
+export default class Article extends Model {
   @PrimaryKey
   @Default(uuidv4)
   @Column({
@@ -45,7 +46,7 @@ export class Article extends Model {
   declare image: string;
 
   @ForeignKey(() => User)
-  @Column
+  @Column(DataType.UUID)
   declare userId: string;
 
   @BelongsTo(() => User)
@@ -54,18 +55,18 @@ export class Article extends Model {
   @BelongsToMany(() => Tag, () => ArticleTags)
   declare tags: Tag[];
 
-  @HasMany(() => ArticleLikes)
-  declare articleLikes: ArticleLikes[];
+  @HasMany(() => ArticleLike)
+  declare articleLikes: ArticleLike[];
 
   @HasMany(() => ArticleView)
   declare articleViews: ArticleView[];
 
-  @Column
   @Default(0)
+  @Column
   declare viewCount: number;
 
-  @Column
   @Default(0)
+  @Column
   declare likeCount: number;
 
   @CreatedAt
@@ -76,15 +77,4 @@ export class Article extends Model {
 
   @DeletedAt
   declare deletionAt: Date;
-}
-
-@Table
-export class ArticleTags extends Model {
-  @ForeignKey(() => Article)
-  @Column
-  declare articleId: string;
-
-  @ForeignKey(() => Tag)
-  @Column
-  declare tagId: string;
 }
