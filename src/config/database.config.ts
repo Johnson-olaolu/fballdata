@@ -15,9 +15,8 @@ const database = new Sequelize(DB_NAME || "", DB_USERNAME || "", DB_PASSWORD || 
 });
 
 export const initDatabase = async () => {
-  console.log({ DB_NAME, DB_USERNAME, DB_PASSWORD });
   await database.sync({ force: true, alter: true });
-  console.log("Database loaded");
+  console.log("Database Connected");
 };
 
 // Export the connection object as the default module
