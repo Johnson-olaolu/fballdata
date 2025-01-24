@@ -1,7 +1,22 @@
-import { Column, CreatedAt, DataType, Default, DeletedAt, HasMany, Index, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
+import {
+  BeforeCreate,
+  BeforeUpdate,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  DeletedAt,
+  HasMany,
+  Index,
+  Model,
+  PrimaryKey,
+  Table,
+  UpdatedAt,
+} from "sequelize-typescript";
 import { v4 as uuidv4 } from "uuid";
 import { RoleEnum } from "../utils/constants";
 import Article from "./Article.model";
+import bcrypt from "bcryptjs";
 
 @Table
 export default class User extends Model {
@@ -82,4 +97,21 @@ export default class User extends Model {
 
   @DeletedAt
   declare deletionAt: Date;
+
+  // Instance method to compare passwords
+  async comparePassword(plainPassword: string): Promise<boolean> {
+    const ismatch = await bcrypt.compare(plainPassword, this.password);
+    return ismatch;
+  }
+
+  // Hook to hash the password before saving
+  @BeforeCreate
+  @BeforeUpdate
+  static async hashPassword(user: User) {
+    // user.password = await bcrypt.hash(user.password, 10);
+    if (user.changed("password")) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(user.password, salt);
+    }
+  }
 }

@@ -16,4 +16,6 @@ export const {
   DB_DIALECT,
   EMAIL_USER,
   EMAIL_PASS,
+  SITE_URL,
+  JWT_EXPIRES_IN,
 } = process.env;

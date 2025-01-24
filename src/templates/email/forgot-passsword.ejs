@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Readr - Password Reset</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+      }
+      .container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+      }
+      .header {
+        background-color: #4a90e2;
+        color: white;
+        text-align: center;
+        padding: 20px;
+      }
+      .content {
+        padding: 20px;
+      }
+      .button {
+        display: inline-block;
+        background-color: #4a90e2;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+      }
+      .expire-note {
+        color: #888;
+        font-size: 0.9em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Password Reset</h1>
+      </div>
+      <div class="content">
+        <p>Hi <%= username %>,</p>
+
+        <p>You recently requested a password reset for your Readr account. Click the button below to reset your password:</p>
+
+        <p>
+          <a href="<%= resetLink %>" class="button">Reset Password</a>
+        </p>
+
+        <p class="expire-note">This link will expire in <%= linkExpirationMinutes %> minutes.</p>
+
+        <p>If you didn't request this password reset, please ignore this email or contact support if you're concerned.</p>
+
+        <p>Best regards,<br />Readr Support Team</p>
+      </div>
+    </div>
+  </body>
+</html>
