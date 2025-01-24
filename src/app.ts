@@ -4,6 +4,7 @@ import { registerRoutes } from "./routes";
 import database from "./config/database.config";
 const app = express();
 app.set("view engine", "ejs");
+app.use(express.static(path.join(__dirname, "public")));
 
 app.set("views", path.join(__dirname, "views"));
 
