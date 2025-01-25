@@ -1,6 +1,6 @@
 import { Op } from "sequelize";
 
-const getDateRange = (range: string) => {
+export const getDateRange = (range: string) => {
   const now = new Date();
   switch (range) {
     case "1week":

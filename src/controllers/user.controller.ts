@@ -3,6 +3,10 @@ import expressAsyncHandler from "express-async-handler";
 import User from "../models/User.model";
 import cloudinaryService from "../services/cloudinary.service";
 import { AppError } from "../utils/errorHandler";
+import { getDateRange } from "../utils/misc";
+import ArticleView from "../models/ArticleViews.model";
+import Article from "../models/Article.model";
+import ArticleLike from "../models/ArticleLike.model";
 
 class UserController {
   public getUserById = async (id: string) => {
@@ -65,7 +69,57 @@ class UserController {
     });
   });
 
-  public getUserViews = expressAsyncHandler(async (req: Request, res: Response) => {});
+  public getUserViews = expressAsyncHandler(async (req: Request, res: Response) => {
+    const userId = req.params.userId;
+    const { range } = req.query;
+    const dateFilter = getDateRange((range as string) || "");
+
+    const views = await ArticleView.findAll({
+      where: {
+        createdAt: dateFilter, // Filter views by date
+      },
+      include: [
+        {
+          model: Article,
+          where: {
+            authorId: userId, // Filter articles by authorId
+          },
+        },
+      ],
+    });
+
+    res.status(201).json({
+      data: views,
+      message: "user views fetched successfully",
+      success: true,
+    });
+  });
+
+  public getUserLikes = expressAsyncHandler(async (req: Request, res: Response) => {
+    const userId = req.params.userId;
+    const { range } = req.query;
+    const dateFilter = getDateRange((range as string) || "");
+
+    const likes = await ArticleLike.findAll({
+      where: {
+        createdAt: dateFilter, // Filter views by date
+      },
+      include: [
+        {
+          model: Article,
+          where: {
+            authorId: userId, // Filter articles by authorId
+          },
+        },
+      ],
+    });
+
+    res.status(201).json({
+      data: likes,
+      message: "user likes fetched successfully",
+      success: true,
+    });
+  });
 }
 
 export default new UserController();
