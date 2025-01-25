@@ -51,3 +51,28 @@ export const sendWelcomeEmail = async (user: User, verificationUrl: string) => {
     }
   );
 };
+
+export const sendResetPasswordEmail = async (user: User, resetLink: string) => {
+  const htmlContent = await ejs.renderFile(path.resolve("../templates/email/forgot-passsword.ejs"), {
+    username: user.userName,
+    resetLink,
+    linkExpiration: "15 minutes",
+  });
+
+  transporter.sendMail(
+    {
+      from: process.env.EMAIL_USER,
+      to: user.email,
+      subject: "Reset your password",
+      template: "reset-password",
+      html: htmlContent,
+    } as ExtendedOptions,
+    (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(`Email sent: ${info.response}`);
+      }
+    }
+  );
+};

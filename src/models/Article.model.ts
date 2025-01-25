@@ -45,12 +45,15 @@ export default class Article extends Model {
   @Column
   declare image: string;
 
+  @Column
+  declare imageId: string;
+
   @ForeignKey(() => User)
   @Column(DataType.UUID)
-  declare userId: string;
+  declare authorId: string;
 
   @BelongsTo(() => User)
-  declare user: User;
+  declare author: User;
 
   @BelongsToMany(() => Tag, () => ArticleTags)
   declare tags: Tag[];

@@ -18,4 +18,7 @@ export const {
   EMAIL_PASS,
   SITE_URL,
   JWT_EXPIRES_IN,
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET,
+  CLOUDINARY_NAME,
 } = process.env;

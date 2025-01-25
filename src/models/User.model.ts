@@ -69,22 +69,19 @@ export default class User extends Model {
   declare isVerified: boolean;
 
   @Column
+  declare bio: string;
+
+  @Column
   declare profilePicture: string;
+
+  @Column
+  declare profilePictureId: string;
 
   @Column
   declare bannerPicture: string;
 
   @Column
-  declare verifyEmailToken: string;
-
-  @Column
-  declare verifyEmailTokenTTL: string;
-
-  @Column
-  declare chnagePasswordToken: string;
-
-  @Column
-  declare chnagePasswordTokenTTL: string;
+  declare bannerPictureId: string;
 
   @HasMany(() => Article)
   declare articles: Article[];
