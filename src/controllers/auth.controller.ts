@@ -10,6 +10,14 @@ import { sendResetPasswordEmail, sendVerificationEmail, sendWelcomeEmail } from 
 import { ResetPasswordDto } from "../dto/reset-password.dto";
 
 class AuthController {
+  public registerView = async (req: Request, res: Response) => {
+    res.render("pages/auth/register");
+  };
+
+  public loginView = async (req: Request, res: Response) => {
+    res.render("pages/auth/login", { error: null });
+  };
+
   public register = expressAsyncHandler(async (req: Request<{}, {}, RegisterDto>, res: Response) => {
     const { email, password, fullName } = req.body;
 
@@ -28,41 +36,31 @@ class AuthController {
     const registrationToken = jwt.sign({ email: user.email }, JWT_ACCESS_TOKEN_SECRET ?? "", { expiresIn: "1h" });
     const verificationUrl = `${SITE_URL}/api/auth/verify-email/confirm?token=${registrationToken}`;
     sendWelcomeEmail(user, verificationUrl);
-    res.status(201).json(this.signInUser(user));
+    res.redirect("/verify-email");
   });
 
   public login = expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate("local", async (err: any, user: User | false, info: { message: string }) => {
       try {
         if (err || !user) {
-          const error = new Error(info.message);
-          res.status(400);
-          return next(error);
+          // const error = new Error(info.message);
+          // res.status(400);
+          // return next(error);
+          res.render("pages/auth/login", { error: info.message });
+          return;
         }
         req.login(user, { session: false }, async (error: Error | null) => {
           if (error) return next(error);
           const body = { id: user.id, email: user.email };
-          let token = jwt.sign({ user: body }, JWT_ACCESS_TOKEN_SECRET || "");
-          return res.json({
-            success: true,
-            message: "User Logged in successfully",
-            token: token,
-            user: user,
-          });
+          let token = jwt.sign({ user: body }, JWT_ACCESS_TOKEN_SECRET ?? "");
+          res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "strict" }); // Send token as an HTTP-only cookie
+          res.redirect("/dashboard");
         });
       } catch (error) {
         return next(error);
       }
     })(req, res, next);
   });
-
-  private readonly signInUser = (user: User) => {
-    const token = jwt.sign({ id: user.id, email: user.email }, JWT_ACCESS_TOKEN_SECRET ?? "", { expiresIn: JWT_EXPIRES_IN as any });
-    return {
-      token,
-      user,
-    };
-  };
 
   public sendVerifyEmail = expressAsyncHandler(async (req: Request, res: Response) => {
     const { email } = req.query;

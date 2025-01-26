@@ -9,6 +9,8 @@ import { forgotPasswordSchema } from "../dto/forgot-password.dto";
 const authRouter = Router();
 
 // Public routes
+authRouter.get("/register", authController.registerView);
+authRouter.get("/login", authController.loginView);
 authRouter.post("/register", validate(registerSchema), authController.register);
 authRouter.post("/login", validate(loginSchema), authController.login);
 authRouter.get("/verify-email/send", validate(verifyEmailSchema), authController.sendVerifyEmail);

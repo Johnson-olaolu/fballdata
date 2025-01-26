@@ -1,13 +1,20 @@
 import passport from "passport";
 import { Strategy as JWTstrategy, ExtractJwt } from "passport-jwt";
 import User from "../../models/User.model";
+import { JWT_ACCESS_TOKEN_SECRET } from "../../config";
+import { Request } from "express";
 
-export const jwtStrategy = () =>
+// Custom token extractor for cookies
+const cookieExtractor = (req: Request): string | null => {
+  return req?.cookies?.token || null;
+};
+
+export const jwtStrategy = (passport: passport.PassportStatic) =>
   passport.use(
     new JWTstrategy(
       {
-        secretOrKey: process.env.JWT_SECRET || "",
-        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+        secretOrKey: JWT_ACCESS_TOKEN_SECRET ?? "",
+        jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
       },
       async (token, done) => {
         const user = await User.findOne({ where: { email: token.user.email } });
