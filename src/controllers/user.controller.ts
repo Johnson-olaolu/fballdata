@@ -18,46 +18,46 @@ class UserController {
     return user;
   };
 
-  public updateUser = expressAsyncHandler(async (req: Request, res: Response) => {
-    const userId = req.params.userId;
-    const { username, bio } = req.body;
+  // public updateUser = expressAsyncHandler(async (req: Request, res: Response) => {
+  //   const userId = req.params.userId;
+  //   const { username, bio } = req.body;
 
-    const user = await this.getUserById(userId);
+  //   const user = await this.getUserById(userId);
 
-    const files = req.files as {
-      [fieldname: string]: Express.Multer.File[];
-    };
+  //   const files = req.files as {
+  //     [fieldname: string]: Express.Multer.File[];
+  //   };
 
-    const profilePicture = files.profilePicture?.[0];
-    if (profilePicture) {
-      if (user.profilePictureId) {
-        await cloudinaryService.delete(user.profilePictureId);
-      }
-      const profileDetails = await cloudinaryService.upload(profilePicture);
-      user.profilePicture = profileDetails.url;
-      user.profilePictureId = profileDetails.public_id;
-    }
+  //   const profilePicture = files.profilePicture?.[0];
+  //   if (profilePicture) {
+  //     if (user.profilePictureId) {
+  //       await cloudinaryService.delete(user.profilePictureId);
+  //     }
+  //     const profileDetails = await cloudinaryService.upload(profilePicture);
+  //     user.profilePicture = profileDetails.url;
+  //     user.profilePictureId = profileDetails.public_id;
+  //   }
 
-    const bannerPicture = files.bannerPicture?.[0];
-    if (bannerPicture) {
-      if (user.bannerPictureId) {
-        await cloudinaryService.delete(user.bannerPictureId);
-      }
-      const bannerDetails = await cloudinaryService.upload(profilePicture);
-      user.bannerPicture = bannerDetails.url;
-      user.bannerPictureId = bannerDetails.public_id;
-    }
+  //   const bannerPicture = files.bannerPicture?.[0];
+  //   if (bannerPicture) {
+  //     if (user.bannerPictureId) {
+  //       await cloudinaryService.delete(user.bannerPictureId);
+  //     }
+  //     const bannerDetails = await cloudinaryService.upload(profilePicture);
+  //     user.bannerPicture = bannerDetails.url;
+  //     user.bannerPictureId = bannerDetails.public_id;
+  //   }
 
-    (user.userName = username), (user.bio = bio);
+  //   user.bio = bio;
 
-    await user.save();
+  //   await user.save();
 
-    res.status(201).json({
-      data: user,
-      message: "User updated sucessfully",
-      success: true,
-    });
-  });
+  //   res.status(201).json({
+  //     data: user,
+  //     message: "User updated sucessfully",
+  //     success: true,
+  //   });
+  // });
 
   public getUserData = expressAsyncHandler(async (req: Request, res: Response) => {
     const user = (req as any).user as User;

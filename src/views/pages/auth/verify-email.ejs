@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../../partials/common/head'); %>
+    <title>Verify Email | Readr</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <style>
+    body {
+      height: 100vh;
+      width: 100vw;
+    }
+  </style>
+  <body class="d-flex align-items-center py-4">
+    <div class="p-4 p-md-5 border rounded-3 bg-body-tertiary mx-auto mw-100" style="width: 520px">
+      <a href="/" type="button" class="btn btn-secondary mb-3 rounded">
+        <i class="fa-solid fa-chevron-left"></i>
+      </a>
+
+      <div class="text-center mb-4">
+        <h2 class="fw-bold mb-1">Verify Your Email</h2>
+        <p class="text-muted">We've sent a verification link to your email</p>
+      </div>
+
+      <% if (error) { %>
+      <div class="form-floating border border-danger rounded p-3 text-danger mb-3"><%= error %></div>
+      <% } %>
+
+      <div class="text-center mb-4">
+        <p>Please check your email and click on the verification link to continue.</p>
+        <p class="text-muted">Didn't receive the email?</p>
+
+        <button id="resend-btn" class="btn btn-primary" onclick="resendEmail()">
+          <div id="resend-button-loader" class="d-none">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span class="sr-only">Loading...</span>
+          </div>
+          <span id="resend-button-text">Resend Email</span>
+        </button>
+
+        <p id="timer" class="mt-3 d-none text-muted">Resend available in <span id="countdown">60</span> seconds</p>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    let timeLeft = 60;
+    let timerId = null;
+
+    function startTimer() {
+      document.getElementById("resend-btn").disabled = true;
+      document.getElementById("timer").classList.remove("d-none");
+
+      timerId = setInterval(() => {
+        timeLeft--;
+        document.getElementById("countdown").textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+          clearInterval(timerId);
+          document.getElementById("resend-btn").disabled = false;
+          document.getElementById("timer").classList.add("d-none");
+          timeLeft = 60;
+        }
+      }, 1000);
+    }
+
+    async function resendEmail() {
+      const email = new URLSearchParams(window.location.search).get("email");
+
+      document.getElementById("resend-button-loader").classList.remove("d-none");
+      document.getElementById("resend-button-text").classList.add("d-none");
+
+      try {
+        const response = await fetch(`/api/auth/verify-email/resend?email=${email}`, {
+          method: "POST",
+        });
+
+        if (response.ok) {
+          startTimer();
+        } else {
+          console.error("Failed to resend verification email");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+
+      document.getElementById("resend-button-loader").classList.add("d-none");
+      document.getElementById("resend-button-text").classList.remove("d-none");
+    }
+  </script>
+</html>

@@ -12,29 +12,57 @@
       width: 100vw;
     }
   </style>
-  <body class="d-flex align-items-center py-4">
-    <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary mx-auto">
+  <body class="d-flex align-items-center p-4">
+    <form action="/auth/register" method="post" class="p-4 p-md-5 border rounded-3 bg-body-tertiary mx-auto mw-100" style="width: 520px">
       <a href="/" type="button" class="btn btn-secondary mb-3 rounded">
         <i class="fa-solid fa-chevron-left"></i>
       </a>
-      <div class="form-floating mb-3">
-        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" />
-        <label for="floatingInput">Email address</label>
+
+      <div class="text-center mb-4">
+        <h2 class="fw-bold mb-1">Create an Account</h2>
+        <p class="text-muted">Join our community of writers</p>
       </div>
+
+      <% if (error) { %>
+      <div class="form-floating border border-danger rounded p-3 text-danger mb-3"><%= error %></div>
+      <% } %>
+
       <div class="form-floating mb-3">
-        <input type="password" class="form-control" id="floatingPassword" placeholder="Password" />
+        <input name="fullName" type="text" class="form-control" id="floatingInput" placeholder="Full Name" />
+        <label for="floatingInput"> Full Name</label>
+        <small id="fullnamecheck" style="color: red; display: none">FullName is missing</small>
+      </div>
+
+      <div class="form-floating mb-3">
+        <input name="email" type="email" class="form-control" id="floatingEmail" placeholder="name@example.com" />
+        <label for="floatingEmail">Email address</label>
+        <small id="emailcheck" style="color: red; display: none">Email is missing</small>
+      </div>
+
+      <div class="form-floating mb-3">
+        <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password" />
         <label for="floatingPassword">Password</label>
+        <small id="passcheck" style="color: red; display: none"> Please fill the password </small>
       </div>
+
       <div class="form-floating mb-3">
-        <input type="password" class="form-control" id="floatingPassword" placeholder="Password" />
-        <label for="floatingPassword">Confirm Password</label>
+        <input name="confirmPassword" type="password" class="form-control" id="conpassword" placeholder="Confirm Password" />
+        <label for="conpassword">Confirm Password</label>
+        <small id="conpasscheck" style="color: red; display: none"> Passwords didn't match </small>
       </div>
-      <div class="checkbox mb-3">
-        <label> <input type="checkbox" value="remember-me" /> Remember me </label>
-      </div>
-      <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>
+      <button class="w-100 btn btn-lg btn-primary" type="submit">
+        <div id="register-button-loader" style="display: none">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <span class="sr-only">Loading...</span>
+        </div>
+
+        <span id="register-button-text"> Sign-up</span>
+      </button>
       <hr class="my-4" />
-      <small class="text-body-secondary">By clicking Sign up, you agree to the terms of use.</small>
+      <div class="text-body-secondary text-center">
+        <small class="">Already have an account <a href="/auth/login" class="mb-3 text-decoration-none">login </a> </small>
+      </div>
     </form>
+    <script src="/assets/js/register.js"></script>
   </body>
 </html>

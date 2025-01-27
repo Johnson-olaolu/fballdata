@@ -12,13 +12,11 @@ $(document).ready(function () {
 
     function validateUsername() {
         let usernameValue = $("#floatingInput").val();
-        if (usernameValue.length === "") {
+        let regex =
+            /^([_\-\.0-9a-zA-Z]+)@([_\-\.0-9a-zA-Z]+)\.([a-zA-Z]){2,7}$/;
+        if (!regex.test(usernameValue)) {
             $("#usercheck").show();
-            usernameError = false;
-            return false;
-        } else if (usernameValue.length < 3) {
-            $("#usercheck").show();
-            $("#usercheck").html("**please enter email or username");
+            $("#usercheck").html("**please enter valid email");
             usernameError = false;
             return false;
         } else {

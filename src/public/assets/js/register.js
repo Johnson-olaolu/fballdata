@@ -1,49 +1,51 @@
 $(document).ready(function () {
 
     // Validate Username
-    $("#usercheck").hide();
+    $("#fullnamecheck").hide();
     let usernameError = true;
-    $("#usernames").keyup(function () {
-        validateUsername();
+    $("#floatingInput").keyup(function () {
+        validateFullName();
     });
 
-    function validateUsername() {
-        let usernameValue = $("#usernames").val();
-        if (usernameValue.length === "") {
-            $("#usercheck").show();
+    function validateFullName() {
+        let fullnameValue = $("#floatingInput").val();
+        if (fullnameValue.length === "") {
+            $("#fullnamecheck").show();
             usernameError = false;
             return false;
-        } else if (usernameValue.length < 3 || usernameValue.length > 10) {
-            $("#usercheck").show();
-            $("#usercheck").html("**length of username must be between 3 and 10");
+        } else if (fullnameValue.length < 3) {
+            $("#fullnamecheck").show();
+            $("#fullnamecheck").html("**length of username must be more than 3");
             usernameError = false;
             return false;
         } else {
-            $("#usercheck").hide();
+            $("#fullnamecheck").hide();
             usernameError = true;
         }
     }
 
     // Validate Email
-    const email = document.getElementById("email");
+    const email = document.getElementById("floatingEmail");
     let emailError = true;
     email.addEventListener("blur", () => {
         let regex =
             /^([_\-\.0-9a-zA-Z]+)@([_\-\.0-9a-zA-Z]+)\.([a-zA-Z]){2,7}$/;
-        let s = email.value;
-        if (regex.test(s)) {
-            email.classList.remove("is-invalid");
-            emailError = true;
-        } else {
-            email.classList.add("is-invalid");
+        let s = email.value()
+        if (!regex.test(s)) {
+            $("#emailcheck").show();
+            $("#emailcheck").html("**please enter valid email");
             emailError = false;
+            return false;
+        } else {
+            $("#emailcheck").hide();
+            emailError = true;
         }
     });
 
     // Validate Password
     $("#passcheck").hide();
     let passwordError = true;
-    $("#password").keyup(function () {
+    $("#floatingPassword").keyup(function () {
         validatePassword();
     });
     function validatePassword() {
@@ -53,10 +55,10 @@ $(document).ready(function () {
             passwordError = false;
             return false;
         }
-        if (passwordValue.length < 3 || passwordValue.length > 10) {
+        if (passwordValue.length < 6) {
             $("#passcheck").show();
             $("#passcheck").html(
-                "**length of your password must be between 3 and 10"
+                "**length of your password must be more than 6 digits"
             );
             $("#passcheck").css("color", "red");
             passwordError = false;
@@ -75,7 +77,7 @@ $(document).ready(function () {
     });
     function validateConfirmPassword() {
         let confirmPasswordValue = $("#conpassword").val();
-        let passwordValue = $("#password").val();
+        let passwordValue = $("#floatingPassword").val();
         if (passwordValue !== confirmPasswordValue) {
             $("#conpasscheck").show();
             $("#conpasscheck").html("**Password didn't Match");
@@ -90,7 +92,7 @@ $(document).ready(function () {
 
     // Submit button
     $("#submitbtn").click(function () {
-        validateUsername();
+        validateFullName();
         validatePassword();
         validateConfirmPassword();
         email.dispatchEvent(new Event('blur'));

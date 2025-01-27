@@ -39,14 +39,6 @@ export default class User extends Model {
     unique: true,
   })
   @Index
-  declare userName: string;
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-    unique: true,
-  })
-  @Index
   declare email: string;
 
   @Column({
@@ -67,21 +59,6 @@ export default class User extends Model {
     allowNull: false,
   })
   declare isVerified: boolean;
-
-  @Column
-  declare bio: string;
-
-  @Column
-  declare profilePicture: string;
-
-  @Column
-  declare profilePictureId: string;
-
-  @Column
-  declare bannerPicture: string;
-
-  @Column
-  declare bannerPictureId: string;
 
   @HasMany(() => Article)
   declare articles: Article[];

@@ -4,6 +4,7 @@ import { registerRoutes } from "./routes";
 import database from "./config/database.config";
 import passport from "passport";
 import initializePassport from "./services/strategy";
+import logger from "./config/wiston.config";
 const session = require("express-session");
 
 const app = express();
@@ -18,8 +19,8 @@ initializePassport(passport);
 app.use(passport.initialize());
 
 (async () => {
-  await database.sync({ force: true, alter: true });
-  console.log("Database Connected");
+  await database.sync({ alter: true });
+  logger.info("Database connected");
 })();
 
 // index page
