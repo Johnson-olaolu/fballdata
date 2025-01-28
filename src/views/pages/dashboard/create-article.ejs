@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Dashboard | Readr</title>
+    <%- include('../../partials/common/head.ejs', {user}); %>
+  </head>
+  <body>
+    <%- include('./layout/dashboard-header', {user}); %>
+    <div class="container">
+      <h1>TinyMCE Demo</h1>
+      <!-- Text area matching the selector specified in the TinyMCE configuration -->
+      <textarea id="my-expressjs-tinymce-app">Hello, World!</textarea>
+    </div>
+    <script type="application/javascript" src="/tinymce/tinymce.min.js"></script>
+    <script type="application/javascript" src="/assets/js/my-tinymce-config.js"></script>
+  </body>
+</html>

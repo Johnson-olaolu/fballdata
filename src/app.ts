@@ -11,6 +11,8 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public")));
+app.use("/tinymce", express.static(path.join(__dirname, "../node_modules", "tinymce")));
 app.use(cookieParser());
 
 app.set("views", path.join(__dirname, "views"));

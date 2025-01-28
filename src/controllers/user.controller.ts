@@ -9,6 +9,10 @@ import Article from "../models/Article.model";
 import ArticleLike from "../models/ArticleLike.model";
 
 class UserController {
+  public homeView = expressAsyncHandler(async (req: Request, res: Response) => {
+    res.render("pages/dashboard/home", { user: (req as any).user });
+  });
+
   public getUserById = async (id: string) => {
     const user = await User.findOne({ where: { id } });
 

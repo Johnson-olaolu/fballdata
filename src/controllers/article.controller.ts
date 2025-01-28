@@ -14,6 +14,10 @@ import ArticleView from "../models/ArticleViews.model";
 import ArticleLike from "../models/ArticleLike.model";
 
 class ArticleController {
+  public createArticleView = expressAsyncHandler(async (req: Request, res: Response) => {
+    res.render("pages/dashboard/create-article", { user: (req as any).user });
+  });
+
   private async getArticleById(articleId: string) {
     const article = await Article.findOne({ where: { id: articleId } });
     if (!article) {

@@ -3,6 +3,8 @@ import IndexController from "../controllers";
 import authRouter from "./auth.routes";
 import passport from "passport";
 import User from "../models/User.model";
+import dashboardRouter from "./dashboard.routes";
+import isAuthenticated from "../middleware/authMiddleware";
 export const registerRoutes = (app: express.Application) => {
   app.get(
     "/",
@@ -22,4 +24,5 @@ export const registerRoutes = (app: express.Application) => {
     IndexController.getName
   );
   app.use("/auth", authRouter);
+  app.use("/dashboard", isAuthenticated, dashboardRouter);
 };
