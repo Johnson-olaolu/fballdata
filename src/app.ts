@@ -5,12 +5,13 @@ import database from "./config/database.config";
 import passport from "passport";
 import initializePassport from "./services/strategy";
 import logger from "./config/wiston.config";
-const session = require("express-session");
+import cookieParser from "cookie-parser";
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
+app.use(cookieParser());
 
 app.set("views", path.join(__dirname, "views"));
 

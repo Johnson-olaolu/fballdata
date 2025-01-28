@@ -10,8 +10,13 @@ const isAuthenticated = expressAsyncHandler(async (req: Request, res: Response, 
         res.status(401);
         res.redirect("/auth/login");
       } else {
-        req.user = user;
-        next();
+        if (user.isVerified === false) {
+          res.status(401);
+          res.redirect("/auth/verify-email");
+        } else {
+          req.user = user;
+          next();
+        }
       }
     } catch (error) {
       next(error);

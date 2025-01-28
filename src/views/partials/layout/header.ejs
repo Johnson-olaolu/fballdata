@@ -9,10 +9,25 @@
         <input type="search" class="form-control w-100" placeholder="Search..." aria-label="Search" />
       </form>
 
+      <% if (user) { %>
+      <div class="dropdown text-end">
+        <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px">
+            <span class="text-uppercase fw-bold"><%= user.fullName.charAt(0) %></span>
+          </div>
+        </a>
+        <ul class="dropdown-menu text-small">
+          <li><a class="dropdown-item" href="#">New article</a></li>
+          <li><hr class="dropdown-divider" /></li>
+          <li><a class="dropdown-item" href="#">Sign out</a></li>
+        </ul>
+      </div>
+      <% } else { %>
       <div class="col-md-3 text-end">
         <a href="auth/login" role="button" class="btn btn-outline-primary me-2">Login</a>
         <a href="auth/register" role="button" class="btn btn-primary">Become a writer</a>
       </div>
+      <% } %>
     </nav>
   </div>
   <nav class="py-2 border-bottom">
