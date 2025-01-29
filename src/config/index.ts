@@ -14,6 +14,8 @@ export const {
   DB_NAME,
   DB_HOST,
   DB_DIALECT,
+  DB_SSL_MODE,
+  DB_CA_CERTIFICATE,
   EMAIL_USER,
   EMAIL_PASS,
   SITE_URL,
