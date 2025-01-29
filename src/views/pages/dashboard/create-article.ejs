@@ -1,17 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Dashboard | Readr</title>
+    <title>Create Article | Readr</title>
     <%- include('../../partials/common/head.ejs', {user}); %>
+    <link rel="stylesheet" href="/assets/css/create-article.css" />
+    <!-- Include stylesheet -->
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
   </head>
   <body>
     <%- include('./layout/dashboard-header', {user}); %>
-    <div class="container">
-      <h1>TinyMCE Demo</h1>
-      <!-- Text area matching the selector specified in the TinyMCE configuration -->
-      <textarea id="my-expressjs-tinymce-app">Hello, World!</textarea>
+    <div class="p-5 bg-body-tertiary">
+      <div class="container">
+        <div class="d-flex justify-content-between items-center align-items-start mb-5">
+          <h1 class="h1">Create Article</h1>
+          <button type="button" class="btn active">Submit</button>
+        </div>
+
+        <form>
+          <input type="text" name="userId" value="<%= user.id %>" class="d-none" />
+          <div class="bd-example-snippet bd-code-snippet">
+            <div
+              id="image-preview"
+              role="button"
+              style="height: 300px; background: #868e96"
+              class="w-100 bd-example m-0 border-0 mb-3 position-relative"
+            >
+              <div id="image-placeholder" class="d-flex flex-column align-items-center position-absolute top-50 start-50 translate-middle gap-3">
+                <span class="fs-3">Upload Image</span>
+                <i class="fa fa-plus fa-2xl" aria-hidden="true"></i>
+              </div>
+            </div>
+            <input id="fileInput" type="file" class="d-none" accept="image/*" placeholder="Upload image" required />
+            <input
+              type="text"
+              name="title"
+              style="font-size: 2.5rem"
+              class="w-100 form-control border-0 custom-input mb-3"
+              placeholder="Enter title"
+              required
+            />
+            <div class="editor-wrapper">
+              <div id="toolbar">
+                <select class="ql-font"></select>
+                <select class="ql-size"></select>
+                <button class="ql-bold"></button>
+                <button class="ql-italic"></button>
+                <button class="ql-underline"></button>
+                <button class="ql-strike"></button>
+                <button class="ql-color"></button>
+                <button class="ql-background"></button>
+                <button class="ql-script" value="sub"></button>
+                <button class="ql-script" value="super"></button>
+                <button class="ql-header" value="1"></button>
+                <button class="ql-header" value="2"></button>
+                <button class="ql-blockquote"></button>
+                <button class="ql-code-block"></button>
+                <button class="ql-list" value="ordered"></button>
+                <button class="ql-list" value="bullet"></button>
+                <button class="ql-align"></button>
+                <button class="ql-indent" value="-1"></button>
+                <button class="ql-indent" value="+1"></button>
+                <button class="ql-link"></button>
+                <button class="ql-image"></button>
+                <button class="ql-video"></button>
+                <button class="ql-formula"></button>
+              </div>
+              <div id="editor-container"></div>
+            </div>
+            <input type="text" class="d-none" name="text" />
+          </div>
+
+          <input
+            type="text"
+            name="tags"
+            class="w-100 form-control border-0 custom-input mb-3"
+            placeholder="Enter tags, seperated by comma"
+            required
+          />
+        </form>
+        <!-- Text area matching the selector specified in the TinyMCE configuration -->
+      </div>
     </div>
-    <script type="application/javascript" src="/tinymce/tinymce.min.js"></script>
-    <script type="application/javascript" src="/assets/js/my-tinymce-config.js"></script>
+    <!-- Include the Quill library -->
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <script src="/assets/js/create-article.js"></script>
   </body>
 </html>

@@ -6,5 +6,6 @@ const dashboardRouter = Router();
 
 dashboardRouter.get("/home", userController.homeView);
 dashboardRouter.get("/create-article", articleController.createArticleView);
+dashboardRouter.post("/create-article", articleController.createArticle);
 
 export default dashboardRouter;

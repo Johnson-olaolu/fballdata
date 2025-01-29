@@ -4,7 +4,7 @@ export const createArticleSchema = z.object({
   userId: z.string(),
   title: z.string(),
   text: z.string(),
-  image: z.any(),
+  image: z.any().optional(),
   tagNames: z.array(z.string()),
 });
 

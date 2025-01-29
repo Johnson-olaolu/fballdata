@@ -1,0 +1,93 @@
+.custom-input {
+  background-color: transparent !important;
+  border-radius: 0 !important;
+  padding: 8px 0 !important;
+}
+
+.custom-input:focus {
+  box-shadow: none !important;
+}
+
+#editor-container {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  min-height: 200px;
+  font-family: "Sofia Pro", sans-serif; /* Match the font */
+  font-size: 18px;
+  color: #212529 !important; /* Adjust as needed */
+}
+
+.ql-toolbar {
+  background: transparent !important;
+  border: none !important;
+  padding: 8px 0 !important;
+  display: flex !important;
+  flex-wrap: wrap; /* Ensures responsiveness */
+  justify-content: space-between; /* Spaces buttons evenly */
+  width: 100% !important;
+  border: none !important;
+}
+
+.ql-container {
+  border: none !important;
+}
+
+.ql-editor {
+  background: transparent !important;
+  color: #212529 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.ql-editor p {
+  margin: 0;
+}
+
+.ql-editor.ql-blank::before {
+  left: 0 !important;
+}
+/* #DEE2E6 : white , 212529 : black*/
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .ql-container {
+    color: #dee2e6 !important;
+    background: transparent; /* Dark background */
+  }
+
+  .ql-editor {
+    color: #dee2e6 !important;
+  }
+
+  /* Ensure toolbar adapts */
+  /* .ql-toolbar {
+    background: #1e1e1e !important;
+    border-color: #333 !important;
+  } */
+
+  /* Style buttons in dark mode */
+  .ql-toolbar button,
+  .ql-toolbar .ql-picker-label {
+    color: #dee2e6 !important;
+  }
+
+  /* Make icons adapt to dark mode */
+  .ql-toolbar button svg {
+    fill: #dee2e6 !important;
+  }
+  .ql-toolbar button svg .ql-stroke {
+    stroke: #dee2e6 !important;
+  }
+  .ql-toolbar button svg .ql-fill {
+    fill: #dee2e6 !important;
+  }
+
+  .ql-editor.ql-blank::before {
+    color: #dee2e6bf !important;
+  }
+
+  #editor-container {
+    color: #dee2e6; /* Adjust as needed */
+  }
+}
