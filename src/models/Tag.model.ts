@@ -23,11 +23,11 @@ export default class Tag extends Model {
   declare articles: Article[];
 
   @CreatedAt
-  declare creationAt: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
   declare updatedAt: Date;
 
   @DeletedAt
-  declare deletionAt: Date;
+  declare deletedAt: Date;
 }

@@ -20,11 +20,11 @@ export default class ArticleLike extends Model {
   declare article: Article;
 
   @CreatedAt
-  declare creationAt: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
   declare updatedAt: Date;
 
   @DeletedAt
-  declare deletionAt: Date;
+  declare deletedAt: Date;
 }

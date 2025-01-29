@@ -12,7 +12,7 @@ import { Op } from "sequelize";
 import { UpdateArticleDto } from "../dto/update-article.dto";
 import ArticleView from "../models/ArticleViews.model";
 import ArticleLike from "../models/ArticleLike.model";
-import { parseTag } from "../utils/misc";
+import { getDateRange, parseTag } from "../utils/misc";
 import { error } from "console";
 
 class DashboardController {
@@ -61,6 +61,9 @@ class DashboardController {
         const tag = await Tag.findOrCreate({ where: { name: parseTag(tagName) } });
         tags.push(tag[0]);
       }
+
+      await article.save();
+
       article.$set("tags", tags);
 
       await article.save();
@@ -143,6 +146,47 @@ class DashboardController {
     await Article.destroy({ where: { id: articleId } });
 
     res.redirect("/dashboard/home");
+  };
+
+  public getDashboardData = async (req: Request, res: Response) => {
+    const { timeQuery } = req.query;
+    // ["1week", "2weeks", "1month", "6months", "1year", "all"]
+    const views = await ArticleView.findAll({
+      where: {
+        createdAt: getDateRange(timeQuery as string),
+      },
+      include: [
+        {
+          model: Article,
+          where: { authorId: (req.user as any).id },
+          attributes: ["id", "title"],
+        },
+      ],
+    });
+
+    const likes = await ArticleLike.findAll({
+      where: {
+        createdAt: {
+          [Op.gte]: getDateRange(timeQuery as string),
+        },
+      },
+      include: [
+        {
+          model: Article,
+          where: { authorId: (req.user as any).id },
+          attributes: ["id", "title"],
+        },
+      ],
+    });
+
+    res.status(200).json({
+      data: {
+        views,
+        likes,
+      },
+      message: "Dashboard data fetched successfully",
+      success: true,
+    });
   };
 
   public getArticles = expressAsyncHandler(async (req: Request, res: Response) => {

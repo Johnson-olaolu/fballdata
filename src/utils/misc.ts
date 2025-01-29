@@ -2,6 +2,7 @@ import { Op } from "sequelize";
 
 export const getDateRange = (range: string) => {
   const now = new Date();
+
   switch (range) {
     case "1week":
       return { [Op.gte]: new Date(now.setDate(now.getDate() - 7)) };
@@ -16,7 +17,7 @@ export const getDateRange = (range: string) => {
     case "all":
       return {}; // No date filter for all time
     default:
-      throw new Error("Invalid date range");
+      return { [Op.gte]: new Date(now.setDate(now.getDate() - 7)) };
   }
 };
 

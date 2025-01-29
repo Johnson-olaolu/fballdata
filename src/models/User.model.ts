@@ -64,13 +64,13 @@ export default class User extends Model {
   declare articles: Article[];
 
   @CreatedAt
-  declare creationAt: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
   declare updatedAt: Date;
 
   @DeletedAt
-  declare deletionAt: Date;
+  declare deletedAt: Date;
 
   // Instance method to compare passwords
   async comparePassword(plainPassword: string): Promise<boolean> {

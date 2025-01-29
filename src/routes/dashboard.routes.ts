@@ -12,5 +12,6 @@ dashboardRouter.get("/edit-article/:articleId", dashboardController.editArticleV
 dashboardRouter.post("/edit-article/:articleId", upload.single("articleImage"), dashboardController.updateArticle);
 dashboardRouter.get("/view-article/:articleId", dashboardController.viewArticleView);
 dashboardRouter.get("/delete-article/:articleId", dashboardController.deleteArticle);
+dashboardRouter.get("/dashboard-data", dashboardController.getDashboardData);
 
 export default dashboardRouter;

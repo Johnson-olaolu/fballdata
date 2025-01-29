@@ -39,6 +39,7 @@ export default class Article extends Model {
 
   @Column({
     allowNull: false,
+    type: DataType.TEXT,
   })
   declare text: string;
 
@@ -73,11 +74,11 @@ export default class Article extends Model {
   declare likeCount: number;
 
   @CreatedAt
-  declare creationAt: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
   declare updatedAt: Date;
 
   @DeletedAt
-  declare deletionAt: Date;
+  declare deletedAt: Date;
 }
