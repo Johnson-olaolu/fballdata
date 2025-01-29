@@ -12,59 +12,138 @@ import { Op } from "sequelize";
 import { UpdateArticleDto } from "../dto/update-article.dto";
 import ArticleView from "../models/ArticleViews.model";
 import ArticleLike from "../models/ArticleLike.model";
+import { parseTag } from "../utils/misc";
+import { error } from "console";
 
-class ArticleController {
+class DashboardController {
   public createArticleView = expressAsyncHandler(async (req: Request, res: Response) => {
-    res.render("pages/dashboard/create-article", { user: (req as any).user });
+    res.render("pages/dashboard/create-article", { user: (req as any).user, error: null });
   });
 
   private async getArticleById(articleId: string) {
-    const article = await Article.findOne({ where: { id: articleId } });
+    const article = await Article.findOne({
+      where: { id: articleId },
+      include: {
+        model: Tag,
+        attributes: ["id", "name"],
+        through: { attributes: [] },
+      },
+    });
     if (!article) {
       throw new AppError("Article not found");
     }
     return article;
   }
 
-  public createArticle = expressAsyncHandler(async (req: Request<{}, {}, CreateArticleDto>, res: Response) => {
+  public createArticle = expressAsyncHandler(async (req: Request, res: Response) => {
     const { text, title, userId, tagNames } = req.body;
+    try {
+      const user = await userController.getUserById(userId);
 
-    const user = await userController.getUserById(userId);
+      const article = Article.build({
+        text,
+        title,
+      });
 
-    const files = req.files as {
-      [fieldname: string]: Express.Multer.File[];
-    };
+      const articleImage = req.file;
 
-    const article = Article.build({
-      text,
-      title,
-    });
+      if (articleImage) {
+        const articleImageDetails = await cloudinaryService.upload(articleImage);
+        article.image = articleImageDetails.url;
+        article.imageId = articleImageDetails.public_id;
+        console.log(articleImageDetails);
+      }
 
-    const articleImage = files.articleImage?.[0];
+      article.authorId = user.id;
 
-    if (articleImage) {
-      const articleImageDetails = await cloudinaryService.upload(articleImage);
-      article.image = articleImageDetails.url;
-      article.imageId = articleImageDetails.public_id;
+      const tags = [];
+      for (const tagName of (tagNames as string).split(",")) {
+        const tag = await Tag.findOrCreate({ where: { name: parseTag(tagName) } });
+        tags.push(tag[0]);
+      }
+      article.$set("tags", tags);
+
+      await article.save();
+
+      res.redirect(`/dashboard/view-article/${article.id}?success=Article Created successfully`);
+    } catch (error) {
+      console.log(error);
+      res.status(500).render("pages/dashboard/create-article", { user: (req as any).user, error: "An error occured please try again" });
     }
-
-    article.authorId = user.id;
-
-    const tags = [];
-    for (const tagName of tagNames) {
-      const tag = await Tag.findOrCreate({ where: { name: tagName } });
-      tags.push(tag[0]);
-    }
-    article.$set("tags", tags);
-
-    await article.save();
-
-    res.status(201).json({
-      data: article,
-      message: "Article created succcessfully",
-      status: true,
-    });
   });
+
+  public viewArticleView = async (req: Request, res: Response) => {
+    const articleId = req.params.articleId;
+    const success = req.query.success;
+
+    const article = await this.getArticleById(articleId);
+
+    if (!article) {
+      //TODO Show no article found error
+      res.render("pages/dashboard/view-article", { article, user: (req as any).user, success: success || null });
+    }
+
+    res.render("pages/dashboard/view-article", { article, user: (req as any).user, success: success || null });
+  };
+
+  public editArticleView = async (req: Request, res: Response) => {
+    const articleId = req.params.articleId;
+
+    const article = await this.getArticleById(articleId);
+
+    if (!article) {
+      //TODO Show no article found error
+      res.render("pages/dashboard/edit-article", { article, user: (req as any).user, error: null, success: null });
+    }
+
+    res.render("pages/dashboard/edit-article", { article, user: (req as any).user, error: null, success: null });
+  };
+
+  public updateArticle = async (req: Request, res: Response) => {
+    const articleId = req.params.articleId;
+    const { text, title, tagNames } = req.body;
+    let article = await this.getArticleById(articleId);
+
+    try {
+      const articleImage = req.file;
+
+      if (articleImage) {
+        const articleImageDetails = await cloudinaryService.upload(articleImage);
+        article.image = articleImageDetails.url;
+        article.imageId = articleImageDetails.public_id;
+        console.log(articleImageDetails);
+      }
+      article.text = text;
+      article.title = title;
+
+      const tags = [];
+      for (const tagName of (tagNames as string).split(",")) {
+        const tag = await Tag.findOrCreate({ where: { name: parseTag(tagName) } });
+        tags.push(tag[0]);
+      }
+      article.$set("tags", tags);
+
+      await article.save();
+
+      article = await this.getArticleById(articleId);
+
+      res
+        .status(201)
+        .render("pages/dashboard/edit-article", { article, user: (req as any).user, success: "Article updated successfully", error: null });
+    } catch (error) {
+      res
+        .status(500)
+        .render("pages/dashboard/edit-article", { article, user: (req as any).user, success: null, error: "An error occured please try again" });
+    }
+  };
+
+  public deleteArticle = async (req: Request, res: Response) => {
+    const articleId = req.params.articleId;
+
+    await Article.destroy({ where: { id: articleId } });
+
+    res.redirect("/dashboard/home");
+  };
 
   public getArticles = expressAsyncHandler(async (req: Request, res: Response) => {
     const articles = await Article.findAll({ include: [User] });
@@ -157,46 +236,6 @@ class ArticleController {
     });
   });
 
-  public updateArticles = expressAsyncHandler(async (req: Request<any, {}, UpdateArticleDto>, res: Response) => {
-    const articleId = req.params.articleId;
-    const { text, title, tagNames } = req.body;
-
-    const article = await this.getArticleById(articleId);
-
-    const files = req.files as {
-      [fieldname: string]: Express.Multer.File[];
-    };
-
-    const articleImage = files.articleImage?.[0];
-
-    if (articleImage) {
-      if (article.imageId) {
-        await cloudinaryService.delete(article.imageId);
-      }
-      const articleImageDetails = await cloudinaryService.upload(articleImage);
-      article.image = articleImageDetails.url;
-      article.imageId = articleImageDetails.public_id;
-    }
-
-    article.text = text;
-    article.title = title;
-
-    const tags = [];
-    for (const tagName of tagNames) {
-      const tag = await Tag.findOrCreate({ where: { name: tagName } });
-      tags.push(tag[0]);
-    }
-    article.$set("tags", tags);
-
-    await article.save();
-
-    res.status(200).json({
-      data: article,
-      message: "Article updated successfully",
-      success: true,
-    });
-  });
-
   public viewArticle = expressAsyncHandler(async (req: Request, res: Response) => {
     const articleId = req.params.articleId;
 
@@ -232,17 +271,6 @@ class ArticleController {
       success: true,
     });
   });
-
-  public deleteArticle = expressAsyncHandler(async (req: Request, res: Response) => {
-    const articleId = req.params.articleId;
-
-    await Article.destroy({ where: { id: articleId } });
-
-    res.status(200).json({
-      message: "Article deleted successfully",
-      success: true,
-    });
-  });
 }
 
-export default new ArticleController();
+export default new DashboardController();

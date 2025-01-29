@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Create Article | Dashbaord | Readr</title>
+    <title>View Article | Dashbaord | Readr</title>
     <%- include('../../partials/common/head.ejs', {user}); %>
     <link rel="stylesheet" href="/assets/css/create-article.css" />
     <!-- Include stylesheet -->
@@ -13,23 +13,24 @@
       <div class="container">
         <% if (error) { %>
         <div class="form-floating border border-danger rounded p-3 text-danger mb-3"><%= error %></div>
+        <% } %> <% if (success) { %>
+        <div class="form-floating border border-success rounded p-3 text-success mb-3"><%= success %></div>
         <% } %>
-        <form action="/dashboard/create-article" enctype="multipart/form-data" method="POST">
+        <form action="/dashboard/edit-article/<%= article.id %>" enctype="multipart/form-data" method="POST">
           <div class="d-flex justify-content-between items-center align-items-start mb-5">
-            <h1 class="h1">Create Article</h1>
+            <h1 class="h1">Edit Article</h1>
             <button type="submit" id="submitArticleButton" class="btn active">Submit</button>
           </div>
-          <input type="text" name="userId" value="<%= user.id %>" class="d-none" />
           <div class="bd-example-snippet bd-code-snippet">
             <div
               id="image-preview"
               role="button"
-              style="height: 300px; background: #868e96"
+              style="height: 300px; background: url('<%= article.image %>')"
               class="w-100 bd-example m-0 border-0 mb-3 position-relative"
             >
               <input id="fileInput" type="file" class="d-none" name="articleImage" accept="image/*" placeholder="Upload image" />
               <div id="image-placeholder" class="d-flex flex-column align-items-center position-absolute top-50 start-50 translate-middle gap-4">
-                <span class="fs-3">Upload Image</span>
+                <span class="fs-3">Change Image</span>
                 <i class="fa fa-plus fa-2xl" aria-hidden="true"></i>
               </div>
             </div>
@@ -38,6 +39,7 @@
               type="text"
               name="title"
               style="font-size: 2.5rem"
+              value="<%= article.title %>"
               class="w-100 form-control border-0 custom-input mb-3"
               placeholder="Enter title"
               required
@@ -78,6 +80,7 @@
           <input
             type="text"
             name="tagNames"
+            value="<%= article.tags.map(tag => tag.name).join(', ') %>"
             class="w-100 form-control border-0 custom-input mb-3"
             placeholder="Enter tags, seperated by comma"
             required
@@ -89,5 +92,8 @@
     <!-- Include the Quill library -->
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
     <script src="/assets/js/create-article.js"></script>
+    <script>
+      quill.clipboard.dangerouslyPasteHTML("<%= article.text %>");
+    </script>
   </body>
 </html>

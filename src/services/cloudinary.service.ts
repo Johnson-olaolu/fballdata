@@ -29,7 +29,6 @@ class CloudinaryService {
     })
       .then((response: unknown) => {
         const uploadResponse = response as UploadApiResponse;
-        console.log(`Buffer upload_stream wth promise success - ${uploadResponse.public_id}`);
         return uploadResponse;
       })
       .catch((error: UploadApiErrorResponse) => {

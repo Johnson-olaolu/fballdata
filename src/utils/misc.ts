@@ -19,3 +19,11 @@ export const getDateRange = (range: string) => {
       throw new Error("Invalid date range");
   }
 };
+
+export function parseTag(str: string) {
+  return str
+    .trim()
+    .split(/\s+/)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}

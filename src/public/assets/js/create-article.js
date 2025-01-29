@@ -28,3 +28,13 @@ fileInput.addEventListener("change", function () {
         reader.readAsDataURL(file);
     }
 });
+
+
+//copy text to input
+const textInput = document.getElementById("text-input");
+const editor = document.querySelector("#editor-container .ql-editor");
+const submitButton = document.getElementById("submitArticleButton");
+
+submitButton.addEventListener("click", () => {
+    textInput.value = editor.children[0].innerHTML;
+});
