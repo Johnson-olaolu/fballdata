@@ -15,11 +15,11 @@
             <img src="<%= article.image %>" class=" w-100 mb-3" style="height: 300px;" alt="">
             <div class="">
                   <h1 class="h1 mb-3"><%= article.title %></h1>
-                  <p class="mb-3">Author :<%= article.author.fullName %> </p>
-                  <p class="mb-3">Tags : <%= article.tags.map(tag => tag.name).join(', ') %></p>
+                  <p class="mb-3">Author: <%= article.author.fullName %> </p>
+                  <p class="mb-3">Tags: <%= article.tags.map(tag => tag.name).join(', ') %></p>
                     <p class=" d-flex align-items-center gap-5"> 
                     <span> <i class="fas fa-eye"></i> <%= article.viewCount %> Views</span>
-                       <span class="">  <i class="fas fa-heart"></i> <%= article.likeCount %> Likes</span>
+                    <button id="likeCountButton" class=" btn">  <i class="fas fa-heart"></i> <span class="" id="likeCount"> <%= article.likeCount %></span> Likes</button>
                     </p>
             </div>
             <div class="">
@@ -28,5 +28,9 @@
           
       </div>
     </div>
+    <script>
+     let articleId = "<%= article.id %>"
+    </script>
+    <script src="/assets/js/view-article.js"></script>
   </body>
 </html>

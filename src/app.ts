@@ -26,5 +26,4 @@ app.use(passport.initialize());
 
 // index page
 registerRoutes(app);
-
 export default app;

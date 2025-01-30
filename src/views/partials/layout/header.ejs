@@ -6,7 +6,7 @@
       </div>
 
       <form class="col-12 col-lg-6 mb-3 mb-lg-0 justify-content-center" role="search">
-        <input type="search" class="form-control w-100" placeholder="Search..." aria-label="Search" />
+        <input type="search" class="form-control w-100" placeholder="Search..." style="cursor: pointer" id="articleSearhBar" aria-label="Search" />
       </form>
 
       <% if (user) { %>
@@ -40,3 +40,28 @@
     </div>
   </nav>
 </header>
+<script></script>
+
+<!-- Modal -->
+<div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="mb-3">
+          <div class="input-group input-group-lg">
+            <span class="input-group-text">
+              <i class="fas fa-search"></i>
+            </span>
+            <input type="text" class="form-control" id="modalArticleSearchBar" placeholder="Search..." />
+          </div>
+        </div>
+        <div style="max-height: 400px; overflow-y: auto" class="container" id="modalArticleSearchResultsContainer">
+          <p class="py-3 text-center mb-0">No search Results</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="">Search for articles</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -242,18 +242,6 @@ class DashboardController {
     });
   });
 
-  public getArticlesByUser = expressAsyncHandler(async (req: Request, res: Response) => {
-    const userId = req.query.userId;
-
-    const articles = await Article.findAll({ where: { authorId: userId } });
-
-    res.status(200).json({
-      data: articles,
-      message: "Articles queried successfully",
-      success: true,
-    });
-  });
-
   public getSingleArticle = expressAsyncHandler(async (req: Request, res: Response) => {
     const articleId = req.params.articleId;
 
@@ -262,42 +250,6 @@ class DashboardController {
     res.status(200).json({
       data: article,
       message: "Article fetched successfully",
-      success: true,
-    });
-  });
-
-  public viewArticle = expressAsyncHandler(async (req: Request, res: Response) => {
-    const articleId = req.params.articleId;
-
-    const article = await this.getArticleById(articleId);
-
-    ArticleView.create({
-      article: article.id,
-    });
-
-    article.viewCount = article.viewCount + 1;
-
-    res.status(200).json({
-      data: article,
-      message: "Article updated successfully",
-      success: true,
-    });
-  });
-
-  public likeArticle = expressAsyncHandler(async (req: Request, res: Response) => {
-    const articleId = req.params.articleId;
-
-    const article = await this.getArticleById(articleId);
-
-    ArticleLike.create({
-      article: article.id,
-    });
-
-    article.likeCount = article.likeCount + 1;
-
-    res.status(200).json({
-      data: article,
-      message: "Article updated successfully",
       success: true,
     });
   });
