@@ -1,6 +1,6 @@
 # Readr - Article Publishing Platform
 
-A web application that allows users to create, publish and read articles. Built with Node.js, Express, TypeScript, and PostgreSQL.
+A web application that allows users to create, publish and read articles. Built with Node.js, Express, TypeScript, and PostgreSQL and EJS.
 
 ## Features
 
