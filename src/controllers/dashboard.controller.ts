@@ -23,11 +23,13 @@ class DashboardController {
   private async getArticleById(articleId: string) {
     const article = await Article.findOne({
       where: { id: articleId },
-      include: {
-        model: Tag,
-        attributes: ["id", "name"],
-        through: { attributes: [] },
-      },
+      include: [
+        {
+          model: Tag,
+          attributes: ["id", "name"],
+          through: { attributes: [] },
+        },
+      ],
     });
     if (!article) {
       throw new AppError("Article not found");
@@ -198,59 +200,46 @@ class DashboardController {
     });
   });
 
-  public queryArticle = expressAsyncHandler(async (req: Request<{}, QueryArticleDto, {}>, res: Response) => {
-    const { userId, title, tagNames, orderBy, sortBy } = req.query as QueryArticleDto;
+  public queryArticle = expressAsyncHandler(async (req: Request, res: Response) => {
+    const { userId, search, orderBy, sortBy, limit, offset } = req.query;
 
     // Build the where clause
     const whereClause: any = {};
 
     if (userId) {
-      whereClause.authorId = userId; // Filter by user ID
+      whereClause.authorId = userId;
     }
 
-    if (title) {
-      whereClause.title = {
-        [Op.iLike]: `%${title}%`, // Case-insensitive title search
-      };
+    if (search) {
+      whereClause[Op.or] = [
+        { title: { [Op.iLike]: `%${search}%` } }, // Title matches search
+        { "$author.fullName$": { [Op.iLike]: `%${search}%` } }, // Author's fullName matches search
+        { "$tags.name$": { [Op.iLike]: `%${search}%` } }, // Tag's name matches search
+      ];
     }
 
-    // Build the include clause for tags
-    const includeClause = [];
-    if (tagNames && tagNames.length > 0) {
-      includeClause.push({
-        model: Tag,
-        where: {
-          name: {
-            [Op.in]: tagNames, // Filter by tag names
-          },
-        },
-        required: true, // Ensures only articles with these tags are returned
-      });
-    }
-
-    // Determine sorting
-    const order: any[] = [];
-    if (sortBy) {
-      if (sortBy === "tagName") {
-        includeClause.push({
-          model: Tag,
-          attributes: [], // Exclude tag fields from being fetched
-        });
-        order.push([{ model: Tag, as: "tags" }, "name", orderBy ?? "ASC"]);
-      } else {
-        order.push([sortBy, orderBy ?? "ASC"]); // Sort by Article fields
-      }
-    }
-
-    // Fetch articles
-    const articles = await Article.findAll({
+    const data = await Article.findAndCountAll({
       where: whereClause,
-      include: includeClause,
-      order,
+      include: [
+        {
+          model: User, // Include the author details
+          as: "author", // Alias for the association
+          attributes: ["id", "fullName", "email"], // Select specific fields
+        },
+        {
+          model: Tag, // Include the tags
+          as: "tags", // Alias for the association
+          attributes: ["id", "name"], // Select specific fields
+          through: { attributes: [] }, // Exclude the join table (ArticleTags) fields
+        },
+      ],
+      limit: (limit as any) || 10,
+      offset: (offset as any) || 0,
+      subQuery: false,
     });
 
     res.status(200).json({
-      data: articles,
+      data: data,
       message: "Articles queried successfully",
       success: true,
     });

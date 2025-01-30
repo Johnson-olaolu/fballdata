@@ -56,9 +56,8 @@
           <h4 class="h4 mb-3">Your Articles</h4>
           <div class="row d-flex align-items-start justify-content-between mb-3">
             <div class="col-4">
-              <input class="form-control" type="text" placeholder="Search articles..." aria-label="Search articles" />
+              <input class="form-control" type="text" id="articleSearch" placeholder="Search articles..." aria-label="Search articles" />
             </div>
-
             <!-- <div class="col-2">
               <div class="dropdown mb-3">
                 <button
@@ -89,26 +88,37 @@
                   <th scope="col">Tags</th>
                   <th scope="col">Views</th>
                   <th scope="col">Likes</th>
+                  <th scope="col">Created</th>
                   <th scope="col">Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>Great Article</td>
-                  <td>Johnson Olaoluwa</td>
-                  <td>Augur, Tag</td>
-                  <td>100</td>
-                  <td>200</td>
-                  <td>
-                    <div class="d-flex align-items-center gap-4">
-                      <a href="/dashboard/edit-article/1" class="btn btn-primary btn-sm">Edit</a>
-                      <a href="/dashboard/delete-article/1" class="btn btn-danger btn-sm">Delete</a>
-                    </div>
-                  </td>
+              <tbody id="tableData">
+                <tr class="">
+                  <td class="" colspan="6"><div class="text-center w-100">No articles found</div></td>
                 </tr>
               </tbody>
             </table>
             <div class="d-flex align-items-center justify-content-between">
+              <div class="col-2">
+                <div class="dropdown mb-3">
+                  <button
+                    type="button"
+                    class="btn bg-dark dropdown-toggle d-flex justify-content-between align-items-center gap-1 w-100"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Select Category
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><button class="dropdown-item time-query-item" type="button" data-time-query="1week">1 week</button></li>
+                    <li><button class="dropdown-item time-query-item" type="button" data-time-query="2weeks">2 weeks</button></li>
+                    <li><button class="dropdown-item time-query-item" type="button" data-time-query="1month">1 month</button></li>
+                    <li><button class="dropdown-item time-query-item" type="button" data-time-query="2months">2 months</button></li>
+                    <li><button class="dropdown-item time-query-item" type="button" data-time-query="6months">6 months</button></li>
+                    <li><button class="dropdown-item time-query-item" type="button" data-time-query="1year">1 year</button></li>
+                  </ul>
+                </div>
+              </div>
               <nav aria-label="Page navigation example">
                 <ul class="pagination">
                   <li class="page-item">
@@ -131,6 +141,9 @@
         </div>
       </main>
     </div>
+    <script>
+      let userId = "<%= user.id %>";
+    </script>
     <script
       src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js"
       integrity="sha384-eI7PSr3L1XLISH8JdDII5YN/njoSsxfbrkCTnJrzXt+ENP5MOVBxD+l6sEG4zoLp"

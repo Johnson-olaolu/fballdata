@@ -167,3 +167,65 @@ document.querySelectorAll('.time-query-item').forEach((el) => {
         // getDashboardData();
     });
 });
+
+
+///articles 
+const params = new URLSearchParams(location.search);
+
+// url.search = search_params.toString();
+document.getElementById("articleSearch").value = params.get("search") || ""
+// var new_url = url.toString();
+
+const getArticles = () => {
+    const params = new URLSearchParams(location.search);
+    const search = params.get('search') || ""
+    const limit = params.get("limit") || 10
+    const offset = params.get("offset") || 0
+    fetch(`/dashboard/query-articles?userId=${userId}&search=${search}&limit=${limit}&offset=${offset}`)
+        .then(response => response.json())
+        .then(data => {
+            let html = "";
+            data.data.rows.map(d => {
+                html += `
+                             <tr>
+                  <td>${d?.title}</td>
+                  <td>${d?.author?.fullName}</td>
+                  <td>${d.tags?.map(tag => tag.name).join(', ')}</td>
+                  <td>${d?.viewCount}</td>
+                  <td>${d?.likeCount}</td>
+                  <td>${new Date(d?.createdAt).toLocaleDateString("en-GB")}</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-4">
+                      <a href="/dashboard/edit-article/${d?.id}" class="btn btn-primary btn-sm">Edit</a>
+                      <a href="/dashboard/delete-article/${d?.id}" class="btn btn-danger btn-sm">Delete</a>
+                    </div>
+                  </td>
+                </tr>
+                    `;
+            })
+            if (!html) {
+                document.getElementById("tableData").innerHTML = ` <td class="" colspan="6"><div class="text-center w-100">No articles found</div></td>`
+            } else {
+                document.getElementById("tableData").innerHTML = html;
+            }
+
+        })
+}
+
+const search = document.getElementById("articleSearch").value;
+const offset = "";
+const limit = "";
+
+document.getElementById("articleSearch").addEventListener('input', (e) => {
+    const search_text = e.target.value
+    let newURL = new URL(window.location);
+    newURL.searchParams.set("search", search_text);
+
+    history.pushState(null, "", newURL);
+    getArticles()
+})
+
+
+// output : http://demourl.com/path?id=100&id=101&id=102&topic=main
+
+getArticles()
