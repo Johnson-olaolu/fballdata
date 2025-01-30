@@ -193,6 +193,7 @@ const getArticles = () => {
                   <td>${new Date(d?.createdAt).toLocaleDateString("en-GB")}</td>
                   <td>
                     <div class="d-flex align-items-center gap-4">
+                    <a href="/dashboard/view-article/${d?.id}" class="btn active btn-sm">View</a>
                       <a href="/dashboard/edit-article/${d?.id}" class="btn btn-primary btn-sm">Edit</a>
                       <a href="/dashboard/delete-article/${d?.id}" class="btn btn-danger btn-sm">Delete</a>
                     </div>

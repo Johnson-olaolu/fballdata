@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>View Article | Dashbaord | Readr</title>
+    <%- include('../../partials/common/head.ejs'); %>
+    <link rel="stylesheet" href="/assets/css/create-article.css" />
+    <!-- Include stylesheet -->
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+  </head>
+  <body>
+    <%- include('../../partials/layout/header.ejs', {user}); %>
+    <div class="p-5 bg-body-tertiary">
+      <div class="container">
+        <div class="bd-example-snippet bd-code-snippet">
+            <img src="<%= article.image %>" class=" w-100 mb-3" style="height: 300px;" alt="">
+            <div class="">
+                  <h1 class="h1 mb-3"><%= article.title %></h1>
+                  <p class="mb-3">Author :<%= article.author.fullName %> </p>
+                  <p class="mb-3">Tags : <%= article.tags.map(tag => tag.name).join(', ') %></p>
+                    <p class=" d-flex align-items-center gap-5"> 
+                    <span> <i class="fas fa-eye"></i> <%= article.viewCount %> Views</span>
+                       <span class="">  <i class="fas fa-heart"></i> <%= article.likeCount %> Likes</span>
+                    </p>
+            </div>
+            <div class="">
+                <%- article.text %>
+            </div>
+          
+      </div>
+    </div>
+  </body>
+</html>
