@@ -51,8 +51,8 @@ JWT_ACCESS_TOKEN_SECRET=your_jwt_secret
 JWT_EXPIRES_IN=7d
 
 # Email
-EMAIL_USER=your_email
-EMAIL_PASS=your_app_password
+EMAIL_USER=your_gmail_email
+EMAIL_PASS=your_gmail_app_password
 
 # Cloudinary
 CLOUDINARY_API_KEY=your_api_key
@@ -73,10 +73,11 @@ cd readr
 npm install
 ```
 
-3. Run database migrations
-```bash
-npx sequelize-cli db:migrate
+3. Run The database
+```bash 
+docker-compose up --build  -d
 ```
+
 
 4. Start development server
 ```bash
