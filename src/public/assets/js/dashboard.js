@@ -148,16 +148,16 @@ const formatDashboardDataQuery = (data, timeQuery) => {
         value: summaryMap[label],
     }));
 };
+let timeQueryInfo = [
+    { key: "1 Week", value: "1week" },
+    { key: "2 Weeks", value: "2weeks" },
+    { key: "1 Month", value: "1month" },
+    { key: "2 Months", value: "2months" },
+    { key: "6 Months", value: "6months" },
+    { key: "1 Year", value: "1year" },
+]
 
 document.querySelectorAll('.time-query-item').forEach((el) => {
-    let timeQueryInfo = [
-        { key: "1 Week", value: "1week" },
-        { key: "2 Weeks", value: "2weeks" },
-        { key: "1 Month", value: "1month" },
-        { key: "2 Months", value: "2months" },
-        { key: "6 Months", value: "6months" },
-        { key: "1 Year", value: "1year" },
-    ]
     el.addEventListener('click', (e) => {
         document.querySelector('.time-query-item.active')?.classList.remove('active');
         e.target.classList.add('active');
@@ -169,19 +169,16 @@ document.querySelectorAll('.time-query-item').forEach((el) => {
 });
 
 
-///articles 
+// articles 
 const params = new URLSearchParams(location.search);
 
-// url.search = search_params.toString();
-document.getElementById("articleSearch").value = params.get("search") || ""
-// var new_url = url.toString();
 
 const getArticles = () => {
     const params = new URLSearchParams(location.search);
     const search = params.get('search') || ""
     const limit = params.get("limit") || 10
-    const offset = params.get("offset") || 0
-    fetch(`/dashboard/query-articles?userId=${userId}&search=${search}&limit=${limit}&offset=${offset}`)
+    const page = params.get("page") || 1
+    fetch(`/dashboard/query-articles?userId=${userId}&search=${search}&limit=${limit}&page=${page}`)
         .then(response => response.json())
         .then(data => {
             let html = "";
@@ -209,23 +206,102 @@ const getArticles = () => {
                 document.getElementById("tableData").innerHTML = html;
             }
 
+            const pages = Math.ceil(parseInt(data.data.count) / parseInt(limit))
+            if (page == 1) {
+                document.getElementById("page-previous").classList.add("disabled")
+            } else {
+                document.getElementById("page-previous").classList.remove("disabled")
+            }
+            if (page == pages) {
+                document.getElementById("page-next").classList.add("disabled")
+            } else {
+                document.getElementById("page-next").classList.remove("disabled")
+            }
+            let pageshtml = "";
+            for (let index = 1; index <= pages; index++) {
+                pageshtml += `<li class="page-item"><a class="page-link article-page-item" data-article-page="${index}" href="#">${index}</a></li>`
+            }
+            document.getElementById("pagesSection").innerHTML = pageshtml;
+            document.querySelector(`.article-page-item[data-article-page="${page}"]`)?.classList.add('active');
+            document.querySelectorAll('.article-page-item').forEach((el) => {
+                el.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelector('.article-page-item.active')?.classList.remove('active');
+                    e.target.classList.add('active');
+                    const selectedpage = e.target.getAttribute('data-article-page')
+                    let newURL = new URL(window.location);
+                    newURL.searchParams.set("page", selectedpage);
+                    history.pushState(null, "", newURL);
+                    getArticles()
+                });
+            });
         })
 }
 
-const search = document.getElementById("articleSearch").value;
-const offset = "";
-const limit = "";
+getArticles()
 
+
+// article search
+document.getElementById("articleSearch").value = params.get("search") || ""
 document.getElementById("articleSearch").addEventListener('input', (e) => {
     const search_text = e.target.value
     let newURL = new URL(window.location);
     newURL.searchParams.set("search", search_text);
-
     history.pushState(null, "", newURL);
     getArticles()
 })
 
 
-// output : http://demourl.com/path?id=100&id=101&id=102&topic=main
+// article limit
+let limitArticleInfo = [
+    { key: "1 per page", value: "1" },
+    { key: "5 per page", value: "5" },
+    { key: "10 per page", value: "10" },
+    { key: "15 per page", value: "15" },
+    { key: "20 per page", value: "20" },
+]
 
-getArticles()
+const limit = params.get("limit") || 10
+if (limit) {
+    document.querySelector(`.article-limit-item[data-article-limit="${limit}"]`).classList.add('active');
+    document.getElementById("article-limit-select").innerText = limitArticleInfo.find((i) => i.value == limit).key
+}
+
+document.querySelectorAll('.article-limit-item').forEach((el) => {
+    el.addEventListener('click', (e) => {
+        document.querySelector('.article-limit-item.active')?.classList.remove('active');
+        e.target.classList.add('active');
+        const selectedLimit = e.target.getAttribute('data-article-limit')
+        document.getElementById("article-limit-select").innerText = limitArticleInfo.find((i) => i.value == selectedLimit).key
+        let newURL = new URL(window.location);
+        newURL.searchParams.set("limit", selectedLimit);
+        newURL.searchParams.set("page", 1);
+        history.pushState(null, "", newURL);
+        getArticles()
+    });
+});
+
+// article offset
+const page = params.get("page") || 1
+
+
+document.getElementById("page-previous").addEventListener('click', (e) => {
+    e.preventDefault();
+    const params = new URLSearchParams(location.search);
+    const page = params.get("page") || 1
+    let newURL = new URL(window.location);
+    newURL.searchParams.set("page", parseInt(page) - 1);
+    history.pushState(null, "", newURL);
+    getArticles()
+})
+
+document.getElementById("page-next").addEventListener('click', (e) => {
+    e.preventDefault();
+    const params = new URLSearchParams(location.search);
+    const page = params.get("page") || 1
+    let newURL = new URL(window.location);
+    newURL.searchParams.set("page", parseInt(page) + 1);
+    history.pushState(null, "", newURL);
+    getArticles()
+})
+

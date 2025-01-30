@@ -56,7 +56,7 @@ class AuthController {
           const body = { id: user.id, email: user.email };
           let token = jwt.sign({ user: body }, JWT_ACCESS_TOKEN_SECRET ?? "");
           res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "strict" });
-          res.redirect("/dashboard");
+          res.redirect("/dashboard/home");
         });
       } catch (error) {
         return next(error);

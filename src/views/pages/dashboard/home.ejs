@@ -107,30 +107,30 @@
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    Select Category
+                    <span id="article-limit-select">Articles per page</span>
                   </button>
                   <ul class="dropdown-menu">
-                    <li><button class="dropdown-item time-query-item" type="button" data-time-query="1week">1 week</button></li>
-                    <li><button class="dropdown-item time-query-item" type="button" data-time-query="2weeks">2 weeks</button></li>
-                    <li><button class="dropdown-item time-query-item" type="button" data-time-query="1month">1 month</button></li>
-                    <li><button class="dropdown-item time-query-item" type="button" data-time-query="2months">2 months</button></li>
-                    <li><button class="dropdown-item time-query-item" type="button" data-time-query="6months">6 months</button></li>
-                    <li><button class="dropdown-item time-query-item" type="button" data-time-query="1year">1 year</button></li>
+                    <li><button class="dropdown-item article-limit-item" type="button" data-article-limit="1">1 per page</button></li>
+                    <li><button class="dropdown-item article-limit-item" type="button" data-article-limit="5">5 per page</button></li>
+                    <li><button class="dropdown-item article-limit-item" type="button" data-article-limit="10">10 per page</button></li>
+                    <li><button class="dropdown-item article-limit-item" type="button" data-article-limit="15">15 per page</button></li>
+                    <li><button class="dropdown-item article-limit-item" type="button" data-article-limit="20">20 per page</button></li>
                   </ul>
                 </div>
               </div>
               <nav aria-label="Page navigation example">
                 <ul class="pagination">
                   <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous">
+                    <a class="page-link" id="page-previous" href="#" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                     </a>
                   </li>
-                  <li class="page-item"><a class="page-link" href="#">1</a></li>
-                  <li class="page-item"><a class="page-link" href="#">2</a></li>
-                  <li class="page-item"><a class="page-link" href="#">3</a></li>
+                  <div id="pagesSection" class="d-flex">
+                    <li class="page-item"><a class="page-link article-page-item" data-article-page="1" href="#">1</a></li>
+                  </div>
+
                   <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
+                    <a class="page-link" id="page-next" href="#" aria-label="Next">
                       <span aria-hidden="true">&raquo;</span>
                     </a>
                   </li>

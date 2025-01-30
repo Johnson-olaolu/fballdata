@@ -2,18 +2,14 @@ import expressAsyncHandler from "express-async-handler";
 import Article from "../models/Article.model";
 import { AppError } from "../utils/errorHandler";
 import { Request, Response } from "express";
-import { CreateArticleDto } from "../dto/create-article.dto";
 import userController from "./user.controller";
 import cloudinaryService from "../services/cloudinary.service";
 import User from "../models/User.model";
-import { QueryArticleDto } from "../dto/query-article.dto";
 import Tag from "../models/Tag.model";
 import { Op } from "sequelize";
-import { UpdateArticleDto } from "../dto/update-article.dto";
 import ArticleView from "../models/ArticleViews.model";
 import ArticleLike from "../models/ArticleLike.model";
 import { getDateRange, parseTag } from "../utils/misc";
-import { error } from "console";
 
 class DashboardController {
   public createArticleView = expressAsyncHandler(async (req: Request, res: Response) => {
@@ -201,7 +197,7 @@ class DashboardController {
   });
 
   public queryArticle = expressAsyncHandler(async (req: Request, res: Response) => {
-    const { userId, search, orderBy, sortBy, limit, offset } = req.query;
+    const { userId, search, orderBy, sortBy, limit, page } = req.query;
 
     // Build the where clause
     const whereClause: any = {};
@@ -233,8 +229,9 @@ class DashboardController {
           through: { attributes: [] }, // Exclude the join table (ArticleTags) fields
         },
       ],
+      distinct: true,
       limit: (limit as any) || 10,
-      offset: (offset as any) || 0,
+      offset: page ? parseInt(page as any) - 1 : 0,
       subQuery: false,
     });
 
