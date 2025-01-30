@@ -68,6 +68,7 @@
           </div>
           <% }) %>
         </div>
+        <% if (articles.length > 0) { %>
         <div class="d-flex align-items-center justify-content-center">
           <nav aria-label="Page navigation example">
             <ul class="pagination">
@@ -92,6 +93,7 @@
             </ul>
           </nav>
         </div>
+        <% } %>
       </div>
     </div>
     <%- include('../partials/layout/footer', {user}); %>
