@@ -30,7 +30,7 @@ class ArticleController {
       return;
     }
     ArticleView.create({
-      article: article.id,
+      articleId: article.id,
     });
 
     article.viewCount = article.viewCount + 1;
@@ -50,7 +50,7 @@ class ArticleController {
       return;
     }
     ArticleLike.create({
-      article: article.id,
+      articleId: article.id,
     });
 
     article.likeCount = article.likeCount + 1;

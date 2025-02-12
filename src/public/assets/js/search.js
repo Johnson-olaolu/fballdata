@@ -4,12 +4,9 @@ $(document).ready(function () {
         keyboard: false
     })
 
-    // $("#articleSearhBar").input(() => {
-    //     console.log("first")
-    // })
-
     function searchArticles(search) {
         if (search.trim() == "") {
+            document.getElementById("modalArticleSearchResultsContainer").innerHTML = ' <p class="py-3 text-center mb-0">No search Results</p>'
             return;
         }
         fetch(`/article/query?search=${search}`)
@@ -18,7 +15,7 @@ $(document).ready(function () {
                 let html = "";
                 data.data.map(d => {
                     html += `
-                    <a href="/article/${d.id}" class="">
+                    <a href="/article/${d.id}" class="text-decoration-none">
             <div class="row shadow-sm p-2 bg-body-tertiary rounded mb-2">
               <div class="col-md-2">
                 <img src="${d.image}" class="img-fluid" alt="" />
@@ -47,9 +44,8 @@ $(document).ready(function () {
         const modalArticleSearchBar = document.getElementById("modalArticleSearchBar")
         modalArticleSearchBar.focus()
 
-        modalArticleSearchBar.addEventListener("change", (e) => {
+        modalArticleSearchBar.addEventListener("keyup", (e) => {
             const search = e.target.value
-            console.log(search);
             searchArticles(search)
         })
 

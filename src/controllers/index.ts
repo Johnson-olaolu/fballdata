@@ -27,6 +27,10 @@ class IndexController {
     const pages = Math.ceil(count / 12) || 1;
     res.render("pages/index", { user: req.user, page: page || 1, pages: pages, articles: rows });
   };
+
+  public getAbout = async (req: Request, res: Response) => {
+    res.render("pages/about", { user: req.user });
+  };
 }
 
 export default new IndexController();

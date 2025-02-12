@@ -13,7 +13,6 @@ myChart = new Chart(ctx, {
         scales: {
             y: {
                 beginAtZero: true
-
             }
         },
         plugins: {
@@ -26,6 +25,7 @@ myChart = new Chart(ctx, {
         }
     }
 })
+
 function getDashboardData(timeQuery) {
     fetch(`/dashboard/dashboard-data?timeQuery=${timeQuery}`)
         .then(response => response.json())
@@ -68,7 +68,6 @@ const updateChart = (viewData, likeData) => {
 const formatDashboardDataQuery = (data, timeQuery) => {
     const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
     function getRangeFromQuery(query) {
         const endDate = new Date();
         const startDate = new Date();
@@ -129,25 +128,31 @@ const formatDashboardDataQuery = (data, timeQuery) => {
         summaryMap[label] = 0;
     });
 
+
     data.forEach((d) => {
-        const date = b.soldDate;
+        const date = d.createdAt;
         const dateLabel =
             timeQuery === '1week' || timeQuery === '2weeks' || timeQuery === '1month'
                 ? `${daysOfWeek[new Date(date).getDay()]} ${new Date(date).getDate()}`
                 : timeQuery === '2months' || timeQuery === '6months' || timeQuery === '1year'
                     ? `${months[new Date(date).getMonth()]} ${new Date(date).getFullYear()}`
                     : new Date(date).toISOString().split("T")[0];
+        console.log(Object.keys(summaryMap).includes(dateLabel))
 
-        if (summaryMap[dateLabel]) {
+        if (summaryMap[dateLabel] !== undefined) {
+            console.log({ dateLabel })
             summaryMap[dateLabel] += 1;
         }
     });
+
 
     return dateLabels.map((label) => ({
         name: label,
         value: summaryMap[label],
     }));
 };
+
+
 let timeQueryInfo = [
     { key: "1 Week", value: "1week" },
     { key: "2 Weeks", value: "2weeks" },

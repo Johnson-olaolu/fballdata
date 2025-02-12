@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/common/head', {user}); %>
+    <title>Readr</title>
+    <link href="/assets/css/header.css" rel="stylesheet" type="text/css" />
+  </head>
+  <style>
+    .about-section {
+      padding: 60px 0;
+    }
+    .about-section h2 {
+      margin-bottom: 30px;
+      font-weight: bold;
+    }
+    .about-section p {
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+    .benefits-section {
+      padding: 60px 0;
+    }
+    .benefits-section h3 {
+      margin-bottom: 30px;
+      font-weight: bold;
+    }
+    .benefits-section .card {
+      margin-bottom: 20px;
+    }
+  </style>
+  <body>
+    <%- include('../partials/layout/header'); %>
+    <div class="p-5">
+      <div class="container">
+        <div class="container-fluid py-5 text-center">
+          <h1 class="display-5 fw-bold">Welcome to Readr</h1>
+          <p class="col-md-8 fs-4 mx-auto">
+            Readr is a platform designed for avid readers and writers to connect, share, and discover insightful articles. Whether you're looking to
+            expand your knowledge or share your thoughts with the world, Readr offers a seamless and engaging experience.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container benefits-section">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h3>Benefits of Reading on Readr</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Diverse Content</h5>
+              <p class="card-text">
+                Explore a wide range of topics from technology to lifestyle, written by passionate individuals from around the world.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Community Engagement</h5>
+              <p class="card-text">
+                Join a vibrant community of readers and writers. Engage in discussions, share your thoughts, and connect with like-minded people.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Easy Access</h5>
+              <p class="card-text">Access articles anytime, anywhere. Readr is designed to be user-friendly and accessible on all devices.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container benefits-section">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h3>Benefits of Writing on Readr</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Share Your Voice</h5>
+              <p class="card-text">Express your thoughts and ideas with a global audience. Readr provides a platform to amplify your voice.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Build Your Portfolio</h5>
+              <p class="card-text">
+                Showcase your writing skills and build a portfolio of your work. Readr is a great way to establish yourself as a writer.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Connect with Readers</h5>
+              <p class="card-text">Engage with your readers through comments and discussions. Build a community around your writing.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%- include('../partials/layout/footer', {user}); %>
+  </body>
+</html>
